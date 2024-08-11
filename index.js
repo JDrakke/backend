@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Cargar las variables de entorno
 dotenv.config();
@@ -13,12 +14,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Servir archivos estáticos (imágenes y otros activos)
+app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
+
 // Rutas
 const authRoutes = require('./src/routes/authRoutes');
-const productsRouter = require('./src/routes/products'); 
+const productsRouter = require('./src/routes/products');
 
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productsRouter); 
+app.use('/api/products', productsRouter);
 
 // Conectar a MongoDB
 mongoose.connect(process.env.MONGO_URI, {
